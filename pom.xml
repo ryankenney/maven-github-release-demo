@@ -14,10 +14,12 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
+	<!-- TODO: Try moving to variables -->
 	<scm>
-		<connection>scm:git:https://github.com/ryankenney/maven-github-release-demo.git</connection>
-		<developerConnection>scm:git:https://github.com/ryankenney/maven-github-release-demo.git</developerConnection>
-		<tag>HEAD</tag>
+		<connection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</connection>
+		<developerConnection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</developerConnection>
+		<url>https://github.com/ryankenney/maven-github-release-demo/tree/${project.scm.tag}</url>
+		<tag>master</tag>
 	</scm>
 
 	<profiles>
@@ -36,6 +38,14 @@
 							<description>Description of your release</description>
 							<releaseName>${project.artifactId}-${project.version}</releaseName>
 							<tag>release/${project.version}</tag>
+
+							<!-- TODO: Try disabling -->
+							<overwriteArtifact>true</overwriteArtifact>
+							<!-- TODO: Try moving to variables -->
+							<repositoryId>ryankenney/maven-github-release-demo</repositoryId>
+							<serverId>ryankenney/maven-github-release-demo</serverId>
+							<!-- TODO: Try disabling -->
+							<deleteRelease>false</deleteRelease>
 						</configuration>
 					</plugin>
 				</plugins>
