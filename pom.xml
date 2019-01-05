@@ -17,7 +17,7 @@
 		<github.global.server>github</github.global.server>
 	</properties>
 
-	<!-- TODO: Try moving to variables -->
+	<!-- TODO: Try move to variables -->
 	<scm>
 		<connection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</connection>
 		<developerConnection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</developerConnection>
@@ -40,7 +40,19 @@
 				<version>2.8.1</version>
 				<configuration>
 					<!-- TODO: Make variable -->
-					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+					<!--  -->
+					<!-- 
+						Deploy sites files (jars for maven) to a directory on disk
+						
+						NOTE: We're writing releases and snapshots to different directories,
+						then including only releases in the github plugin config that follows. This prevents
+						snapshots from ending up in the github repo. If you want both snapshots
+						and releases in the repo, replace the following two entries with a single
+						"altDeploymentRepository" path, and then point "site-maven-plugin"
+						at the single path.
+					-->
+					<altReleaseDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo/releases</altReleaseDeploymentRepository>
+					<altSnapshotDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo/snapshots</altSnapshotDeploymentRepository>
 				</configuration>
 			</plugin>
 
@@ -49,12 +61,19 @@
 				<artifactId>site-maven-plugin</artifactId>
 				<version>0.12</version>
 				<configuration>
+					<!-- merge new artifacts with existing repo (always true if we're pushing a maven repo) -->
+					<merge>true</merge>
 					<!-- git commit message -->
 					<message>Maven artifacts for ${project.version}</message>
 					<!-- disable webpage processing -->
 					<noJekyll>true</noJekyll>
 					<!-- local directory to publish -->
-					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+					<!--
+						NOTE: We only publish releases in this example.
+						Snapshots will fail with error if attempted.
+						See notes in "maven-deploy-plugin" above.
+					-->
+					<outputDirectory>${project.build.directory}/mvn-repo/releases</outputDirectory>
 					<!-- remote branch name -->
 					<branch>refs/heads/mvn-repo</branch>
 					<includes>
