@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.ryankenney</groupId>
 	<artifactId>maven-github-release-demo</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 	<name>maven-github-release-demo</name>
 	<description>A demo project for tagging/posting github from maven projects</description>
@@ -22,7 +22,7 @@
 		<connection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</connection>
 		<developerConnection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</developerConnection>
 		<url>https://github.com/ryankenney/maven-github-release-demo/tree/${project.scm.tag}</url>
-		<tag>master</tag>
+		<tag>release/1.0</tag>
 	</scm>
 
 	<distributionManagement>
