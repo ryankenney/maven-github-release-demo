@@ -9,19 +9,28 @@
 	<description>A demo project for tagging/posting github from maven projects</description>
 
 	<properties>
+		<!-- Normal boilerplate stuff. Non-crtical. -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
-		<!-- github server corresponds to entry in ~/.m2/settings.xml -->
+		<!--
+			The server entry in settings.xml containing the credentials 
+			to use with when pushing maven artifacts to github
+			(com.github.github:site-maven-plugin below).
+		-->
 		<github.global.server>github</github.global.server>
+
+		<!-- Convenience variables -->
+		<github-owner>ryankenney</github-owner>
+		<github-repo>maven-github-release-demo</github-repo>
+		<temp-mvn-repo>${project.build.directory}/mvn-repo</temp-mvn-repo>
 	</properties>
 
-	<!-- TODO: Try move to variables -->
 	<scm>
-		<connection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</connection>
-		<developerConnection>scm:git:git@github.com:ryankenney/maven-github-release-demo.git</developerConnection>
-		<url>https://github.com/ryankenney/maven-github-release-demo/tree/${project.scm.tag}</url>
+		<connection>scm:git:git@github.com:${github-owner}/${github-repo}.git</connection>
+		<developerConnection>scm:git:git@github.com:${github-owner}/${github-repo}.git</developerConnection>
+		<url>https://github.com/${github-owner}/${github-repo}/tree/${project.scm.tag}</url>
 		<tag>master</tag>
 	</scm>
 
@@ -29,7 +38,7 @@
 		<repository>
 			<id>internal.repo</id>
 			<name>Temporary Staging Repository</name>
-			<url>file://${project.build.directory}/mvn-repo</url>
+			<url>file://${temp-mvn-repo}</url>
 		</repository>
 	</distributionManagement>
 
@@ -40,7 +49,6 @@
 				<version>2.8.1</version>
 				<configuration>
 					<!-- TODO: Make variable -->
-					<!--  -->
 					<!-- 
 						Deploy sites files (jars for maven) to a directory on disk
 						
@@ -51,8 +59,8 @@
 						"altDeploymentRepository" path, and then point "site-maven-plugin"
 						at the single path.
 					-->
-					<altReleaseDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo/releases</altReleaseDeploymentRepository>
-					<altSnapshotDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo/snapshots</altSnapshotDeploymentRepository>
+					<altReleaseDeploymentRepository>internal.repo::default::file://${temp-mvn-repo}/releases</altReleaseDeploymentRepository>
+					<altSnapshotDeploymentRepository>internal.repo::default::file://${temp-mvn-repo}/snapshots</altSnapshotDeploymentRepository>
 				</configuration>
 			</plugin>
 
@@ -61,32 +69,35 @@
 				<artifactId>site-maven-plugin</artifactId>
 				<version>0.12</version>
 				<configuration>
-					<!-- merge new artifacts with existing repo (always true if we're pushing a maven repo) -->
+					<!-- Merge new artifacts with existing repo (always true if we're pushing to a maven repo) -->
 					<merge>true</merge>
-					<!-- git commit message -->
+					<!-- Git commit message -->
 					<message>Maven artifacts for ${project.version}</message>
-					<!-- disable webpage processing -->
+					<!-- Disable webpage processing (maven "site" pages) -->
 					<noJekyll>true</noJekyll>
-					<!-- local directory to publish -->
 					<!--
+						Local directory to read from
+
 						NOTE: We only publish releases in this example.
 						Snapshots will fail with error if attempted.
 						See notes in "maven-deploy-plugin" above.
 					-->
-					<outputDirectory>${project.build.directory}/mvn-repo/releases</outputDirectory>
-					<!-- remote branch name -->
+					<outputDirectory>${temp-mvn-repo}/releases</outputDirectory>
+					<!-- Remote branch name to publish to -->
 					<branch>refs/heads/mvn-repo</branch>
 					<includes>
 						<include>**/*</include>
 					</includes>
-					<!-- TODO: Make variables -->
-					<!-- github repo name -->
-					<repositoryName>maven-github-release-demo</repositoryName>
-					<!-- github username -->
-					<repositoryOwner>ryankenney</repositoryOwner>
+					<!-- GitHub username -->
+					<repositoryOwner>${github-owner}</repositoryOwner>
+					<!-- GitHub repo name -->
+					<repositoryName>${github-repo}</repositoryName>
 				</configuration>
 				<executions>
-					<!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+					<!--
+						Apply the site-maven-plugin's "site" goal to the
+						build's "deploy" phase (needed earlier in the build process)
+					-->
 					<execution>
 						<goals>
 							<goal>site</goal>
@@ -101,7 +112,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.3</version>
 				<configuration>
-					<!-- Specify a custom tag naming convention -->
+					<!-- Specify a custom release tag naming convention -->
 					<tagNameFormat>release/@{project.version}</tagNameFormat>
 				</configuration>
 				<dependencies>
