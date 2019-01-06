@@ -90,9 +90,9 @@ Users of our deployed artifacts can get to them by adding this to their
 list of Maven artifact repos:
 
 	<repositories>
-			<repository>
-					<id>ryankenney_maven-github-release-demo</id>
-					<url>https://raw.github.com/ryankenney/maven-github-release-demo.mvn/mvn-repo/</url>
-			</repository>
+		<repository>
+			<id>ryankenney_maven-github-release-demo</id>
+			<url>https://raw.github.com/ryankenney/maven-github-release-demo.mvn/mvn-repo/</url>
+		</repository>
 	</repositories>
 
