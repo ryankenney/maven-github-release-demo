@@ -72,7 +72,7 @@
 					<!-- Merge new artifacts with existing repo (always true if we're pushing to a maven repo) -->
 					<merge>true</merge>
 					<!-- Git commit message -->
-					<message>Maven artifacts for ${project.version}</message>
+					<message>Maven artifacts for ${project.artifactId}-${project.version}</message>
 					<!-- Disable webpage processing (maven "site" pages) -->
 					<noJekyll>true</noJekyll>
 					<!--
