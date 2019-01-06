@@ -46,6 +46,13 @@ as a password (in which case you don't need a username):
 		</servers>
 	</settings>
 
+The permissions I granted to my access token were:
+
+	repo:status
+	repo_deployment
+	public_repo
+	user:email
+
 
 Setting Up Maven Central
 --------
