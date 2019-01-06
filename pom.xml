@@ -95,8 +95,14 @@
 					</includes>
 					<!-- GitHub username -->
 					<repositoryOwner>${github-owner}</repositoryOwner>
-					<!-- GitHub repo name -->
-					<repositoryName>${github-repo}</repositoryName>
+					<!--
+						GitHub repo name
+						
+						Here we're assuming every "my-repo" has an equivalent
+						"my-repo.mvn" repo for maven artifacts, but you could push
+						it to the same repo.
+					-->
+					<repositoryName>${github-repo}.mvn</repositoryName>
 				</configuration>
 				<executions>
 					<!--
