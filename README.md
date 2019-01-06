@@ -37,14 +37,14 @@ If you happen to use 2-factor authentication,
 you can create a Personal Access Token in GitHub, then provide this
 as a password (in which case you don't need a username):
 
-<settings>
-	<servers>
-		<server>
-			<id>github</id>
-			<password>PERSONAL_ACCESS_TOKEN</password>
-		</server>
-	</servers>
-</settings>
+	<settings>
+		<servers>
+			<server>
+				<id>github</id>
+				<password>PERSONAL_ACCESS_TOKEN</password>
+			</server>
+		</servers>
+	</settings>
 
 
 Setting Up Maven Central
